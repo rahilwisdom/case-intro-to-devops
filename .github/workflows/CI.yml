@@ -1,0 +1,34 @@
+name: CI (Continue Integrations)
+
+on:
+    pull_request:
+        branches: [ "master" ]
+
+jobs:
+
+    #id job
+    build-testing: #Pastikan gak ada spasi
+        name: Build and Testing
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Install Docker Compose
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y docker-compose
+
+            - name: Build and Run Container
+              run: |
+                sudo docker compose up -d
+
+            - name: Testing
+              run: |
+                sleep 20
+                python3 testing/test.py
+
+
+
+
