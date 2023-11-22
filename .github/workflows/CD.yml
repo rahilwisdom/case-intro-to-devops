@@ -1,8 +1,6 @@
 name: CD (Continuous Delivery)
 
-on:
-    push:
-        branches: [ "master" ]
+on: workflow_dispatch
 
 jobs:
     
@@ -20,12 +18,22 @@ jobs:
                 username: ${{ secrets.DOCKERHUB_USERNAME }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            - name: Build and Run Container
-              run: |
-                sudo docker compose up -d
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+              
+            - name: Build and push flaskapp
+              uses: docker/build-push-action@v4
+              with:
+                context: ./app
+                file: ./app/Dockerfile
+                push: true
+                tags: ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:${{ github.run_number }}
+                  
+            - name: Build and push postgres
+              uses: docker/build-push-action@v4
+              with:
+                context: ./postgres
+                file: ./postgres/Dockerfile
+                push: true
+                tags: ${{ secrets.DOCKERHUB_USERNAME }}/postgres:${{ github.run_number }}
             
-            - name: Push To Registry
-              run: |
-                sudo docker compose push 
-
-       
