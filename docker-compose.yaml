@@ -6,7 +6,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
-    image: ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:${{ github.run_number }}
+    image: rahilwisdom/flaskapp:10
     restart: always
     ports:
       - 5000:5000
@@ -17,7 +17,7 @@ services:
 
   database:
     container_name: database
-    image: ${{ secrets.DOCKERHUB_USERNAME }}/postgres:${{ github.run_number }}
+    image: rahilwisdom/postgres:10
     build:
       context: ./postgres
       dockerfile: Dockerfile
