@@ -1,0 +1,30 @@
+name: CD (Continue Deployment)
+
+on: workflow_dispatch
+
+jobs:
+  deploy: 
+    name: Deploy to Server
+    runs-on: self-hosted
+
+    steps:
+      - name : Pull newest images
+        run: |
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:${{ github.run_number }}
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/postgres:${{ github.run_number }}
+      
+      - name: Stop and Remove Existing Containers and Networks
+        run: |
+          docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
+          docker network prune -f
+
+      - name: Create Network and Run containers
+        run : |
+          docker network create absensi
+          docker run -d -p 5432:5432 --network absensi --hostname database --mount "type=volume,source=pgdata,destination=/var/lib/postgresql/data" --name postgres-container -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=qwerty123 -e POSTGRES_DB=absensi ${{ secrets.DOCKERHUB_USERNAME }}/postgres:${{ github.run_number }}
+          sleep 5
+          docker run -d -p 5000:5000 --network absensi --name flask-container ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:${{ github.run_number }}
+      
+      - name: Remove unused data
+        run: |
+          docker system prune -af
