@@ -1,4 +1,4 @@
-name: CD (Continuous Delivery)
+name: CD (Continuous Delivery & Deployment)
 
 on: workflow_dispatch
 
@@ -40,6 +40,7 @@ jobs:
     deploy: 
         name: Deploy to Server
         runs-on: self-hosted
+        needs: build-push
 
         steps:
           - name : Pull newest images
