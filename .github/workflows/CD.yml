@@ -56,9 +56,22 @@ jobs:
           - name: Create Network and Run containers
             run : |
               docker network create absensi
-              docker run -d -p 5432:5432 --network absensi --hostname database --mount "type=volume,source=pgdata,destination=/var/lib/postgresql/data" --name postgres-container -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=qwerty123 -e POSTGRES_DB=absensi ${{ secrets.DOCKERHUB_USERNAME }}/postgres:latest
+              docker run -d -p 5432:5432 --network absensi --hostname database \
+              --mount "type=volume,source=pgdata,destination=/var/lib/postgresql/data" \
+              --name postgres-container -e POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
+              -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
+              -e POSTGRES_DB=${{ secrets.POSTGRES_DB }} \
+              ${{ secrets.DOCKERHUB_USERNAME }}/postgres:latest
+
               sleep 5
-              docker run -d -p 5000:5000 --network absensi --name flask-container ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:latest
+
+              docker run -d -p 5000:5000 --network absensi --name flask-container \
+              -e POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
+              -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
+              -e POSTGRES_DB=${{ secrets.POSTGRES_DB }} \
+              -e POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} \
+              -e POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} \
+              ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:latest
       
           - name: Remove unused data
             run: |
