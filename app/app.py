@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request
 import os
 import psycopg2
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
-db_name = os.environ.get('POSTGRES_DB')
-usr = os.environ.get('POSTGRES_USER')
-usr_pwd = os.environ.get('POSTGRES_PASSWORD')
-hst = os.environ.get('POSTGRES_HOST')
-prt = os.environ.get('POSTGRES_PORT')
+db_name = os.environ["POSTGRES_DB"]
+usr = os.environ["POSTGRES_USER"]
+usr_pwd = os.environ["POSTGRES_PASSWORD"]
+hst = os.environ["POSTGRES_HOST"]
+prt = os.environ["POSTGRES_PORT"]
 
 
 app = Flask(__name__)
