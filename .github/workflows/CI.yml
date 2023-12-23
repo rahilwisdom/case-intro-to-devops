@@ -31,14 +31,14 @@ jobs:
               run: |
                 sudo docker compose --env-file .env up -d
 
-            # - name: Install requirements for testing
-            #   run: |
-            #     pip install -r testing/requirements.txt
+            - name: Install requirements for testing
+              run: |
+                pip install -r testing/requirements.txt
 
             - name: Testing
               run: |
                 sleep 20
-                curl localhost:5000
+                pytest ./testing/test.py
 
 
 
