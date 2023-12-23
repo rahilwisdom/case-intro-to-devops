@@ -29,7 +29,7 @@ jobs:
 
             - name: Build and Run Container
               run: |
-                sudo docker compose up --env-file .env -d
+                sudo docker compose --env-file .env up -d
 
             # - name: Install requirements for testing
             #   run: |
