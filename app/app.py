@@ -5,7 +5,8 @@ import psycopg2
 # load_dotenv()
 
 db_name = os.environ["POSTGRES_DB"]
-usr = os.environ["POSTGRES_USER"]
+# usr = os.environ["POSTGRES_USER"]
+usr = "admin"
 usr_pwd = os.environ["POSTGRES_PASSWORD"]
 hst = os.environ["POSTGRES_HOST"]
 prt = os.environ["POSTGRES_PORT"]
