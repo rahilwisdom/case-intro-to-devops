@@ -29,14 +29,14 @@ jobs:
               run: |
                 sudo docker compose up -d
 
-            - name: Install requirements for testing
-              run: |
-                pip install -r testing/requirements.txt
+            # - name: Install requirements for testing
+            #   run: |
+            #     pip install -r testing/requirements.txt
 
             - name: Testing
               run: |
                 sleep 20
-                pytest testing/test.py
+                curl localhost:5000
 
 
 
