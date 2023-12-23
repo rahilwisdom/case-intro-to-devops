@@ -4,8 +4,7 @@ on: workflow_dispatch
 
 jobs:
 
-    #id job
-    build-testing: #Pastikan gak ada spasi
+    build-testing: 
         name: Build and Testing
         runs-on: ubuntu-latest
 
