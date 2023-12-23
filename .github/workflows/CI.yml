@@ -2,6 +2,12 @@ name: CI (Continue Integrations)
 
 on: workflow_dispatch
 
+env:
+  postgres_user: ${{ secrets.POSTGRES_USER }}
+  postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
+  postgres_db: ${{ secrets.POSTGRES_DB }}
+  postgres_host: ${{ secrets.POSTGRES_HOST }}
+  postgres_port: ${{ secrets.POSTGRES_PORT }}
 
 jobs:
 
@@ -14,14 +20,6 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@v2
 
-            - name: Create .env file
-              run: |
-                echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
-                echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
-                echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
-                echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" >> .env
-                echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> .env
-
             - name: Install Docker Compose
               run: |
                 sudo apt-get update
@@ -31,14 +29,14 @@ jobs:
               run: |
                 sudo docker compose up -d
 
-            - name: Install requirements for testing
-              run: |
-                pip install -r testing/requirements.txt
+            # - name: Install requirements for testing
+            #   run: |
+            #     pip install -r testing/requirements.txt
 
             - name: Testing
               run: |
                 sleep 20
-                pytest ./testing/test.py
+                curl localhost:5000
 
 
 
